@@ -1,1 +1,0 @@
-/usr/bin/c++  -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lGLEW CMakeFiles/test.dir/main.cpp.o -o test 

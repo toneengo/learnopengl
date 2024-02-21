@@ -14,7 +14,7 @@ endif()
 
 add_subdirectory(src)
 target_include_directories(test PRIVATE "src/")
-target_include_directories(test PRIVATE "assets/")
+target_include_directories(test PRIVATE "include/")
 
 set(GCC_COVERAGE_LINK_FLAGS "-lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lGLEW")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
