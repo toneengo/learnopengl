@@ -6,7 +6,8 @@ src/test
 # Local-only files
 CMakeUserPresets.json
 .clangd
-
+CMakeCache.txt
+cmake_install.cmake
 # Temp files 
 *.d
 *.slo
