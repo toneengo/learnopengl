@@ -1,0 +1,27 @@
+build/**
+.vscode/**
+.cache/**
+CMakeFiles/**
+src/test
+# Local-only files
+CMakeUserPresets.json
+.clangd
+
+# Temp files 
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+*.so
+*.dylib
+*.dll
+*.lai
+*.la
+*.a
+*.lib
+*.exe
+*.out
+*.app
