@@ -8,7 +8,10 @@ CMakeUserPresets.json
 .clangd
 CMakeCache.txt
 cmake_install.cmake
-# Temp files 
+Makefile
+CMakeFiles
+# Temp files
+*.cmake 
 *.d
 *.slo
 *.lo
