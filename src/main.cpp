@@ -13,7 +13,7 @@
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
-Camera cam;
+Camera cam(glm::vec3(0.0f, 0.0f, 3.0f));
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -26,13 +26,17 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cam.camPos += camSpeed * cam.camFront;
+        cam.camPos += camSpeed * cam.camDirection;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cam.camPos -= camSpeed * cam.camFront;
+        cam.camPos -= camSpeed * cam.camDirection;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cam.camPos -= glm::normalize(glm::cross(cam.camFront, cam.camUp)) * camSpeed;
+        cam.camPos -= glm::normalize(glm::cross(cam.camDirection, cam.camUp)) * camSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cam.camPos += glm::normalize(glm::cross(cam.camFront, cam.camUp)) * camSpeed;
+        cam.camPos += glm::normalize(glm::cross(cam.camDirection, cam.camUp)) * camSpeed;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        cam.camPos -= camSpeed * cam.camUp;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        cam.camPos += camSpeed * cam.camUp;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -85,6 +89,7 @@ int main() {
     };
     */
 
+    /*
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -128,6 +133,50 @@ int main() {
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
+    */
+    float vertices[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    };
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 2,
         0, 2, 3    // second triangle
@@ -145,15 +194,20 @@ int main() {
         glm::vec3(-1.3f,  1.0f, -1.5f)  
     };
 
-    Shader sh("assets/shader.vs", "assets/shader.fs");
-    sh.use();
+    //Shader sh("assets/shader.vs", "assets/shader.fs");
+    Shader lightsh("assets/light_shader.vs", "assets/light_shader.fs");
+    Shader lightShader("assets/light_shader.vs", "assets/light_shader.fs");
+    Shader lightSourceShader("assets/light_shader.vs", "assets/light_source.fs");
+    lightShader.use();
+    lightShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);;
+    lightShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);;
 
     Texture tex;
     tex.addTex("assets/container.jpg", false);
     tex.addTex("assets/awesomeface.png", true);
 
-    sh.setInt("texture1", 0);
-    sh.setInt("texture2", 1);
+    //sh.setInt("texture1", 0);
+    //sh.setInt("texture2", 1);
 
     tex.actTex(0);
     tex.actTex(1);
@@ -171,17 +225,7 @@ int main() {
 
     glm::mat4 trans = glm::mat4(1.0f);
     trans = glm::translate(trans, glm::vec3(0.0, 0.0, 0.0));
-    trans = glm::rotate(trans, glm::radians(55.0f), glm::vec3(-1.0, -1.0, 0.0));
-
-    
-
-    unsigned int transformLoc = glGetUniformLocation(sh.ID, "transform");
-    unsigned int viewLoc = glGetUniformLocation(sh.ID, "view");
-    unsigned int projLoc = glGetUniformLocation(sh.ID, "projection");
-
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cam.view));
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(cam.proj));
+    //trans = glm::rotate(trans, glm::radians(55.0f), glm::vec3(-1.0, -1.0, 0.0));
     
     unsigned int VBO, VAO, EBO;
 
@@ -199,7 +243,7 @@ int main() {
     //glEnableVertexArrayAttrib(VAO, 2);
 
     glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3*sizeof(float));
+    glVertexArrayAttribFormat(VAO, 1, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float));
 
     //glVertexArrayAttribFormat(VAO, 1, 0, GL_FLOAT, GL_FALSE, 3*sizeof(float));
     //glVertexArrayAttribFormat(VAO, 2, 2, GL_FLOAT, GL_FALSE, 3*sizeof(float));
@@ -207,6 +251,11 @@ int main() {
     glVertexArrayAttribBinding(VAO, 0, 0);
     glVertexArrayAttribBinding(VAO, 1, 0);  
     //glVertexArrayAttribBinding(VAO, 2, 0);  
+    //
+    glm::vec3 lightPos(1.0f, 0.0f, -0.8f);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, lightPos);
+    model = glm::scale(model, glm::vec3(0.2f)); 
     while(!glfwWindowShouldClose(window))
     {
         float currentFrame = glfwGetTime();
@@ -215,24 +264,26 @@ int main() {
         processInput(window);
         glfwPollEvents();        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cam.update();
         
         glBindVertexArray(VAO);
 
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cam.view));
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(cam.proj));
+        lightSourceShader.use();
+        lightSourceShader.setMat4("view", cam.view);
+        lightSourceShader.setMat4("projection", cam.proj);
+        lightSourceShader.setMat4("transform", model);
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
-        for (int i = 0; i < 10; i++) {
-            trans = glm::mat4(1.0f);
-            trans = glm::translate(trans, cubePositions[i]);
-            float angle = 20.0f * i; 
-            trans = glm::rotate(trans, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            transformLoc = glGetUniformLocation(sh.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        lightShader.use();
+        lightShader.setMat4("view", cam.view);
+        lightShader.setMat4("projection", cam.proj);
+        lightShader.setMat4("transform", trans);
+        lightShader.setVec3("lightPos", lightPos);
+        lightShader.setVec3("viewPos", cam.camPos); 
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glBindVertexArray(0);
         

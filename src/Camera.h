@@ -2,6 +2,9 @@
 #define CAMERA_H
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -10,10 +13,8 @@
 class Camera
 {
 public:
-    // the program ID
-    unsigned int ID;
     glm::vec3 camPos;
-    glm::vec3 camFront;
+    glm::vec3 camDirection;
     glm::vec3 camUp;
     glm::mat4 view;
     glm::mat4 proj;
@@ -21,29 +22,30 @@ public:
     float pitch;
     float lastX, lastY, fov;
     bool firstMouse;
-    // constructor reads and builds the shader
-    Camera() {
-        camPos   = glm::vec3(0.0f, 0.0f,  3.0f);
-        camFront = glm::vec3(0.0f, 0.0f, -1.0f);
-        camUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-        view     = glm::lookAt(camPos, camPos + camFront, camUp);
-        proj     = glm::perspective(glm::radians(fov), (float)800/(float)600, 0.1f, 100.0f);
+    Camera(glm::vec3 cameraPos) {
+        camPos   = cameraPos;
+        glm::vec3 camTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 camDirection = glm::normalize(camPos - camTarget);
+
+        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 camRight = glm::normalize(glm::cross(up, camDirection));
+        camUp = glm::normalize(glm::cross(camDirection, camRight));
+
+        view     = glm::lookAt(camPos, camPos + camDirection, camUp);
+        proj     = glm::perspective(glm::radians(45.0f), (float)800/(float)600, 0.1f, 100.0f);
 
         yaw   = -90.0f;
         pitch = 0.0f;
-
         lastX = 400;
         lastY = 300;
-
         fov = 45.0f;
-
         firstMouse = true;
     };
 
     void update() {
-        view     = glm::lookAt(camPos, camPos + camFront, camUp);
-        proj     = glm::perspective(glm::radians(fov), (float)800/(float)600, 0.1f, 100.0f);
+        view     = glm::lookAt(camPos, camPos + camDirection, camUp);
     }
+
     void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     {
         if (firstMouse) // initially set to true
@@ -73,8 +75,7 @@ public:
         direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         direction.y = sin(glm::radians(pitch));
         direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        camFront = glm::normalize(direction);
-        update();
+        camDirection = glm::normalize(direction);
     }
 
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -84,8 +85,6 @@ public:
             fov = 1.0f;
         if (fov > 45.0f)
             fov = 45.0f; 
-        update();
-        
     }
 };
   
